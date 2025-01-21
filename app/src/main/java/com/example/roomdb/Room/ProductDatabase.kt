@@ -1,9 +1,12 @@
 package com.example.roomdb.Room
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.roomdb.Model.Product
 
+@Database(entities = [Product::class], version = 1)
 abstract class ProductDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 

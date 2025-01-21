@@ -1,5 +1,6 @@
 package com.example.roomdb.Room
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -26,5 +27,5 @@ interface ProductDao {
 
 
     @Query("select * from product_table")
-    fun fetchAllProduct(): Flow<List<Product>>
+    fun fetchAllProduct(): LiveData<List<Product>>
 }
