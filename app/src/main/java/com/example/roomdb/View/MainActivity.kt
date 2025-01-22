@@ -23,7 +23,8 @@ import com.example.roomdb.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
 
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    lateinit var updateActivityResult: ActivityResultLauncher<Intent>
 
     lateinit var binding: ActivityMainBinding
     lateinit var productAdapter: ProductAdapter
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter(this)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = productAdapter
 
@@ -105,7 +106,25 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Data has been saved!!", Toast.LENGTH_SHORT).show()
                 }
             })
+
+        updateActivityResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), { data ->
+                val resultCode = data.resultCode
+                val rawData = data.data
+
+                if (resultCode == 200 && rawData != null) {
+                    val productId = rawData.getIntExtra("id", -1)
+                    val productName = rawData.getStringExtra("name")
+                    val productPrice = rawData.getFloatExtra("price", 0.0f)
+                    Log.d("DAATA", "THE DATA $productId, $productName , $productPrice")
+                    val product = Product(productId, productName.toString(), productPrice)
+                    productViewModel.updateData(product)
+//                    Toast.makeText(this, "Data has been Updated.. ", Toast.LENGTH_SHORT).show()
+                }
+
+            })
     }
+
 
     private fun startAddDataActivity() {
         val intent = Intent(this, AddDataActivity::class.java)
