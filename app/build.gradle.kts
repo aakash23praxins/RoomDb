@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,8 +53,11 @@ dependencies {
 
     val room_version = "2.6.1"
 
-    implementation("androidx.room:room-runtime:$room_version")
+    implementation(libs.androidx.room.runtime)
 
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+//    kapt("androidx.room:room-compiler:$room_version")
+
 }
