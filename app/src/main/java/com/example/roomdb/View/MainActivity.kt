@@ -3,6 +3,7 @@ package com.example.roomdb.View
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,9 +44,14 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory =
             ProductViewModelFactory((application as ProductApplication).repository)
 
-        productViewModel = ViewModelProvider(this,viewModelFactory).get(ProductViewModel::class.java)
-        Log.d("Data", "DONE WORK SUCCESSFULLY")
+        productViewModel = ViewModelProvider(this, viewModelFactory)[ProductViewModel::class.java]
+
         productViewModel.getAllData.observe(this,  { data->
+            if (data.isEmpty()) {
+                binding.deleteBtn.visibility = View.GONE
+            } else {
+                binding.deleteBtn.visibility = View.VISIBLE
+            }
             productAdapter.setData(data)
         })
 
@@ -55,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             startAddDataActivity()
         }
 
-        //Delete All Data
+//        Delete All Data
         binding.deleteBtn.setOnClickListener {
             deleteAllData()
         }
@@ -131,5 +137,4 @@ class MainActivity : AppCompatActivity() {
 //        startActivity(intent)
         activityResultLauncher.launch(intent)
     }
-
 }
